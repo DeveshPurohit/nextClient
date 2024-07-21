@@ -1,18 +1,18 @@
-import { cache } from "react";
+import Weather from "@/components/Weather";
+import { GetNews, GetWeather } from "./action";
 
-async function GetHome() {
-  const result = await fetch('http://localhost:8080/api/home', {cache: "no-store"});
-  const res = await result.json();
-  console.log(res)
-  return res;
-}
 
 export default async function Home() {
-  const {message} = await GetHome();
+  const {news} = await GetNews();
   return (
-    <main className="flex min-h-screen flex-col items-center p-8">
-      Lets Rock!
-      <p>{message}</p>
+    <main className="flex min-h-screen flex-col items-start p-8">
+      <h1 className='text-2xl font-bold mb-6'>Top 3 News</h1>
+      {news.map((n: {title: string; description: string; author: string;}, index: number) => (<ul className="mb-5" key={index}>
+            <li className="text-xl font-semibold"><span className="text-gray-500 mr-1">{index+1}. </span> {n.title}</li>
+            <li>{n.description}</li>
+            <li><span className="text-gray-500 mr-1">by </span> {n.author}</li>
+            </ul>))}
+      <Weather/>
     </main>
   );
 }
